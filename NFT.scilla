@@ -41,3 +41,4 @@ fun (some_current_count: Option Uint256) =>
         builtin sub current_count one
     end
   | None => zero
+  
