@@ -1,0 +1,43 @@
+scilla_version 0
+
+(***************************************************)
+(*               Associated library                *)
+(***************************************************)
+import BoolUtils
+library NonfungibleToken
+
+let one_msg = 
+  fun (msg : Message) => 
+  let nil_msg = Nil {Message} in
+  Cons {Message} msg nil_msg
+
+let two_msgs =
+fun (msg1 : Message) =>
+fun (msg2 : Message) =>
+  let msgs_tmp = one_msg msg2 in
+  Cons {Message} msg1 msgs_tmp
+
+let zero = Uint256 0
+let one = Uint256 1
+let tt = True
+let ff = False
+
+let add_owner_count = 
+  fun (some_current_count: Option Uint256) =>
+    match some_current_count with
+    | Some current_count =>
+      builtin add current_count one
+    | None => one
+    end
+
+let sub_owner_count = 
+fun (some_current_count: Option Uint256) =>
+  match some_current_count with
+  | Some current_count =>
+    let is_zero = builtin eq current_count zero in
+    match is_zero with
+    | True => zero
+    | False => 
+        builtin sub current_count one
+    end
+  | None => zero
